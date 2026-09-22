@@ -1,70 +1,200 @@
-const fs = require("fs");
-const path = require("path");
+const {
+  ofertaJaPublicada,
+  registrarOferta
+} = require("./historico");
 
-const DATA_DIR = path.join(__dirname, "..", "data");
-const HISTORICO_FILE = path.join(DATA_DIR, "ofertas.json");
+const {
+  gerarLegenda
+} = require("./legenda");
 
-function garantirArquivo() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
+const ACCESS_TOKEN =
+  process.env.MERCADOLIVRE_ACCESS_TOKEN;
 
-  if (!fs.existsSync(HISTORICO_FILE)) {
-    fs.writeFileSync(
-      HISTORICO_FILE,
-      JSON.stringify([], null, 2),
-      "utf8"
-    );
-  }
+const DESCONTO_MINIMO =
+  Number(process.env.DESCONTO_MINIMO || 10);
+
+function dinheiro(valor) {
+  return Number(valor).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
 }
 
-function lerHistorico() {
-  garantirArquivo();
+async function consultarPreco(itemId) {
+  if (!ACCESS_TOKEN) {
+    throw new Error(
+      "MERCADOLIVRE_ACCESS_TOKEN não configurado."
+    );
+  }
+
+  const resposta = await fetch(
+    `https://api.mercadolibre.com/items/${encodeURIComponent(
+      itemId
+    )}/sale_price?context=channel_marketplace`,
+    {
+      headers: {
+        Authorization: `Bearer ${ACCESS_TOKEN}`
+      }
+    }
+  );
+
+  const dados = await resposta.json();
+
+  if (!resposta.ok) {
+    throw new Error(
+      dados.message ||
+      `Erro Mercado Livre: HTTP ${resposta.status}`
+    );
+  }
+
+  return dados;
+}
+
+async function verificarProduto(produto) {
+  if (!produto.itemId) {
+    return {
+      encontrado: false,
+      ignorado: true,
+      motivo: "Produto sem itemId do Mercado Livre.",
+      produto
+    };
+  }
 
   try {
-    return JSON.parse(
-      fs.readFileSync(HISTORICO_FILE, "utf8")
+    const dados = await consultarPreco(
+      produto.itemId
     );
-  } catch {
-    return [];
+
+    const preco = Number(dados.amount);
+    const precoOriginal = Number(
+      dados.regular_amount
+    );
+
+    if (
+      !Number.isFinite(preco) ||
+      preco <= 0
+    ) {
+      return {
+        encontrado: false,
+        produto,
+        motivo: "Preço inválido retornado pela API."
+      };
+    }
+
+    let desconto = 0;
+
+    if (
+      Number.isFinite(precoOriginal) &&
+      precoOriginal > preco
+    ) {
+      desconto = Math.round(
+        ((precoOriginal - preco) /
+          precoOriginal) *
+          100
+      );
+    }
+
+    const emPromocao =
+      Number.isFinite(precoOriginal) &&
+      precoOriginal > preco;
+
+    if (!emPromocao) {
+      return {
+        encontrado: false,
+        promocao: false,
+        produto,
+        preco
+      };
+    }
+
+    if (desconto < DESCONTO_MINIMO) {
+      return {
+        encontrado: false,
+        promocao: true,
+        abaixoDoMinimo: true,
+        produto,
+        preco,
+        precoOriginal,
+        desconto
+      };
+    }
+
+    const oferta = {
+      produtoId: produto.itemId,
+      nome: produto.nome,
+      loja: produto.loja,
+      imagem: produto.imagem,
+      link: produto.link,
+      preco,
+      precoOriginal,
+      desconto,
+      cupom: produto.cupom || null,
+      precoComCupom: null,
+      promotionId:
+        dados.metadata?.promotion_id || null,
+      promotionType:
+        dados.metadata?.promotion_type || null
+    };
+
+    if (
+      ofertaJaPublicada(
+        oferta.produtoId,
+        oferta.preco
+      )
+    ) {
+      return {
+        encontrado: true,
+        nova: false,
+        oferta
+      };
+    }
+
+    oferta.legenda =
+      gerarLegenda(oferta);
+
+    registrarOferta(oferta);
+
+    return {
+      encontrado: true,
+      nova: true,
+      oferta
+    };
+
+  } catch (erro) {
+    return {
+      encontrado: false,
+      erro: erro.message,
+      produto
+    };
   }
 }
 
-function salvarHistorico(historico) {
-  garantirArquivo();
+async function verificarCatalogo(produtos) {
+  const resultados = [];
 
-  fs.writeFileSync(
-    HISTORICO_FILE,
-    JSON.stringify(historico, null, 2),
-    "utf8"
-  );
-}
+  for (const produto of produtos) {
+    if (
+      String(produto.loja).toLowerCase() !==
+      "mercado livre"
+    ) {
+      continue;
+    }
 
-function ofertaJaPublicada(produtoId, preco) {
-  const historico = lerHistorico();
+    const resultado =
+      await verificarProduto(produto);
 
-  return historico.some(
-    item =>
-      item.produtoId === produtoId &&
-      Number(item.preco) === Number(preco)
-  );
-}
+    resultados.push(resultado);
 
-function registrarOferta(oferta) {
-  const historico = lerHistorico();
+    // Pequena pausa entre consultas
+    await new Promise(
+      resolve => setTimeout(resolve, 300)
+    );
+  }
 
-  historico.unshift({
-    ...oferta,
-    registradaEm: new Date().toISOString()
-  });
-
-  const limitado = historico.slice(0, 500);
-
-  salvarHistorico(limitado);
+  return resultados;
 }
 
 module.exports = {
-  lerHistorico,
-  ofertaJaPublicada,
-  registrarOferta
+  verificarCatalogo,
+  verificarProduto
 };
