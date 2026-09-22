@@ -7,7 +7,7 @@ const {
   gerarLegenda
 } = require("./legenda");
 
-const ACCESS_TOKEN =
+const ACCESS_TOKEN = 
   process.env.MERCADOLIVRE_ACCESS_TOKEN;
 
 const DESCONTO_MINIMO =
