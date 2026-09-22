@@ -585,6 +585,10 @@ app.post("/api/publicar", async (req, res) => {
     }
 
     const { imagemUrl, legenda } = req.body;
+    const imagemAjustada =
+  "https://images.weserv.nl/?url=" +
+  encodeURIComponent(imagemUrl) +
+  "&w=1080&h=1080&fit=contain&bg=ffffff&output=jpg";
 
     if (!imagemUrl || !legenda) {
       return res.status(400).json({
@@ -628,7 +632,7 @@ app.post("/api/publicar", async (req, res) => {
         },
 
         body: JSON.stringify({
-          image_url: imagemUrl,
+          image_url: imagemAjustada,
           caption: legenda,
           access_token: TOKEN
         })
