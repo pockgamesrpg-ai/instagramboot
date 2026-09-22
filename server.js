@@ -8,6 +8,7 @@ const TOKEN = process.env.INSTAGRAM_ACCESS_TOKEN;
 const INSTAGRAM_USER_ID = process.env.INSTAGRAM_USER_ID;
 const API_VERSION = process.env.INSTAGRAM_API_VERSION || "v26.0";
 const ADMIN_KEY = process.env.ADMIN_KEY;
+const PRODUTOS = require("./produtos.json");
 
 app.get("/", (req, res) => {
   res.json({
@@ -25,6 +26,9 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+app.get("/api/produtos", (req, res) => {
+  res.json(PRODUTOS);
+});
 app.get("/painel", (req, res) => {
   res.setHeader("Cache-Control", "no-store");
 
