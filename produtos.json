@@ -1,0 +1,92 @@
+[
+  {
+    "nome": "PC Gamer Completo com Monitor e Periféricos",
+    "loja": "Amazon",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/pc-completo.jpg",
+    "link": "https://link.amazon/B0bPj1fnU"
+  },
+  {
+    "nome": "Mouse Gamer RGB 10.000 DPI",
+    "loja": "Amazon",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/mouse-rgb.jpg",
+    "link": "https://link.amazon/B05yFhnk4"
+  },
+  {
+    "nome": "Teclado Mecânico Gamer",
+    "loja": "Amazon",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/teclado.jpg",
+    "link": "https://link.amazon/B01jPeUJB"
+  },
+  {
+    "nome": "Headset Gamer com Microfone",
+    "loja": "Amazon",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/headset.jpg",
+    "link": "https://link.amazon/B03Xt26GD"
+  },
+  {
+    "nome": "HAYLOU GX1 Microfone Dinâmico",
+    "loja": "Amazon",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/microfone.jpg",
+    "link": "https://link.amazon/B08VufXmS"
+  },
+  {
+    "nome": "Memória RAM 16 GB",
+    "loja": "Amazon",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/memoria-ram.jpg",
+    "link": "https://link.amazon/B095bihor"
+  },
+  {
+    "nome": "Processador AMD Ryzen 7 5700G",
+    "loja": "Amazon",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/ryzen-7.jpg",
+    "link": "https://link.amazon/B0jeA4yKZ"
+  },
+  {
+    "nome": "SSD NVMe M.2 1 TB",
+    "loja": "Amazon",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/ssd.jpg",
+    "link": "https://link.amazon/B0c6ZGAd2"
+  },
+  {
+    "nome": "Samsung Galaxy A36 5G 128 GB",
+    "loja": "Mercado Livre",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/ml-galaxy-a36.png",
+    "link": "https://meli.la/17mEKCk"
+  },
+  {
+    "nome": "PlayStation 5 Slim Edição Digital",
+    "loja": "Mercado Livre",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/ml-ps5-slim.png",
+    "link": "https://meli.la/1XmS9Qi"
+  },
+  {
+    "nome": "MSI GeForce RTX 5060 8 GB",
+    "loja": "Mercado Livre",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/ml-rtx-5060.png",
+    "link": "https://meli.la/1Jxw7Kn"
+  },
+  {
+    "nome": "Smart TV Hisense 40 polegadas FHD",
+    "loja": "Mercado Livre",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/ml-hisense-40.png",
+    "link": "https://meli.la/22wHkQH"
+  },
+  {
+    "nome": "Smart TV Pro LG 55 polegadas 4K",
+    "loja": "Mercado Livre",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/ml-lg-55.png",
+    "link": "https://meli.la/1wKjiaV"
+  },
+  {
+    "nome": "Monitor Gamer AOC AGON G50 144 Hz",
+    "loja": "Mercado Livre",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/ml-aoc-agon.png",
+    "link": "https://meli.la/2etXXAQ"
+  },
+  {
+    "nome": "Memória RAM DDR4 16 GB 3200 MHz",
+    "loja": "Mercado Livre",
+    "imagem": "https://centraldosetups.pockgamesrpg.chatgpt.site/assets/ml-ram-16gb.png",
+    "link": "https://meli.la/1acHPMB"
+  }
+]
